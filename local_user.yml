@@ -14,7 +14,7 @@
   - name: Create a new user added to a group with a password
     win_shell: |
       $Username = "{{ username }}"
-      $Password = ConvertTo-SecureString "{{ vault_password }}"" -AsPlainText -Force
+      $Password = ConvertTo-SecureString "{{ vault_password }}" -AsPlainText -Force
       New-LocalUser $Username -Password $Password
       Add-LocalGroupMember -Group "{{ group }}" -Member "{{ username }}"
   
