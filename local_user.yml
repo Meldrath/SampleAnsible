@@ -1,0 +1,22 @@
+---
+#This playbook would be great for a sysadmin to create a given user(s) across 
+#multiple systems with a vaulted password in a windows environment. Could
+#also be used to create temporary users on a system. Does not add the user
+#to AD etc, an additional task would be needed for that.
+
+- hosts: windows
+  vars:
+    group: guest
+    username: test
+
+  tasks:
+
+  - name: Create a new user added to a group with a password
+    win_shell: |
+      $Username = "{{ username }}"
+      $Password = ConvertTo-SecureString "{{ vault_password }}"" -AsPlainText -Force
+      New-LocalUser $Username -Password $Password
+      Add-LocalGroupMember -Group "{{ group }}" -Member "{{ username }}"
+  
+  - name: Remove a user
+    win_shell: Remove-LocalUser -Name "{{ username }}"
